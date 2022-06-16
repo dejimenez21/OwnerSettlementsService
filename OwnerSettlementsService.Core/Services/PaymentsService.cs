@@ -24,6 +24,8 @@ namespace OwnerSettlementsService.Core.Services
         public async Task<OperationResult<Payment>> CreatePayment(Payment inputPayment)
         {
             inputPayment.CreatedAt = await _dateTimeBroker.GetCurrentDateTime();
+            _paymentsRepository.Insert(inputPayment);
+            await _paymentsRepository.SaveChangesAsync();
             return inputPayment;
         }
     }

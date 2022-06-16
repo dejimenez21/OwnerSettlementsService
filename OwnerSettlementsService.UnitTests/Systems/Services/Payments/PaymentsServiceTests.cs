@@ -72,5 +72,6 @@ public partial class PaymentsServiceTests
         await _paymentsService.CreatePayment(inputPayment);
 
         _paymentsRepositoryMock.Verify(broker => broker.Insert(It.Is(inputPayment, _comparer)), Times.Once);
+        _paymentsRepositoryMock.Verify(broker => broker.SaveChangesAsync(), Times.Once);
     }
 }
