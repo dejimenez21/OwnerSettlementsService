@@ -15,10 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\OwnerSettlementsService.Core\OwnerSettlementsService.Core.csproj" />
     <ProjectReference Include="..\OwnerSettlementsService.Data\OwnerSettlementsService.Data.csproj" />
   </ItemGroup>
 
