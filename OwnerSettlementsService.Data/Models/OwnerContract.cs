@@ -13,7 +13,7 @@ namespace OwnerSettlementsService.Data.Models
         public string OwnerName { get; set; }
         [Column(TypeName = "decimal(12,2)")]
         public decimal TotalShare { get; set; }
-        public DateTime RegisterAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
     }
 }

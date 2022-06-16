@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -12,10 +13,10 @@ namespace OwnerSettlementsService.Data.Models
         public int Id { get; set; }
         [Column(TypeName = "decimal(12,2)")]
         public decimal Amount { get; set; }
-        public string Delivery { get; set; }
-        public bool Confirmed { get; set; }
+        public string DeliveredBy { get; set; }
+        public bool Confirmed { get; set; } = false;
         public string Comment { get; set; }
-        public bool ToOwner { get; set; }
-
+        public DateTime SentAt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

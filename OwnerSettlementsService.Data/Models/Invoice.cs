@@ -12,5 +12,6 @@ namespace OwnerSettlementsService.Data.Models
         [Range(1, 12)]
         public int Month { get; set; }
         public DateTime GeneratedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

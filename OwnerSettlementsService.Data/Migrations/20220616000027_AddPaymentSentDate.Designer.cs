@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OwnerSettlementsService.Data;
 
 namespace OwnerSettlementsService.Data.Migrations
 {
     [DbContext(typeof(OSSDbContext))]
-    partial class OSSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220616000027_AddPaymentSentDate")]
+    partial class AddPaymentSentDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,9 +30,6 @@ namespace OwnerSettlementsService.Data.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(12,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("GeneratedAt")
                         .HasColumnType("datetime2");
@@ -50,14 +49,14 @@ namespace OwnerSettlementsService.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("OwnerName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RegisterAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("TotalShare")
                         .HasColumnType("decimal(12,2)");
@@ -83,14 +82,14 @@ namespace OwnerSettlementsService.Data.Migrations
                     b.Property<bool>("Confirmed")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("DeliveredBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SentAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("ToOwner")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
