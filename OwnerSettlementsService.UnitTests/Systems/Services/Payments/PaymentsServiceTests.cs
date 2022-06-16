@@ -10,6 +10,7 @@ using System;
 using Force.DeepCloner;
 using OwnerSettlementsService.Core;
 using FluentAssertions;
+using OwnerSettlementsService.UnitTests.Helpers;
 
 namespace OwnerSettlementsService.UnitTests.Systems.Services;
 
@@ -18,7 +19,7 @@ public partial class PaymentsServiceTests
     private readonly Mock<IDateTimeBroker> _dateTimeBrokerMock;
     private readonly Mock<IPaymentsRepository> _paymentsRepositoryMock;
     private readonly IPaymentsService _paymentsService;
-
+    private readonly Comparer<Payment, int> _comparer;
 
     public PaymentsServiceTests()
     {
@@ -26,6 +27,8 @@ public partial class PaymentsServiceTests
         _paymentsRepositoryMock = new Mock<IPaymentsRepository>();
 
         _paymentsService = new PaymentsService(_paymentsRepositoryMock.Object, _dateTimeBrokerMock.Object);
+
+        _comparer = new Comparer<Payment, int>();
     }
 
     [Fact]
@@ -51,4 +54,23 @@ public partial class PaymentsServiceTests
         actualResult.Should().BeEquivalentTo(expectedResult);
     }
 
+    [Fact]
+    public async Task CreatePayment_Calls_InsertRepository()
+    {
+        var today = new DateTime(2022, 5, 21);
+        var inputPayment = new Payment
+        {
+            Amount = 6600,
+            Comment = "Some random comment",
+            SentAt = DateTime.Now,
+            DeliveredBy = "Sonia"
+        };
+
+        _paymentsRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
+        _dateTimeBrokerMock.Setup(x => x.GetCurrentDateTime()).ReturnsAsync(today);
+
+        await _paymentsService.CreatePayment(inputPayment);
+
+        _paymentsRepositoryMock.Verify(broker => broker.Insert(It.Is(inputPayment, _comparer)), Times.Once);
+    }
 }
