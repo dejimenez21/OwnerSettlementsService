@@ -9,6 +9,5 @@ namespace OwnerSettlementsService.Data.Repositories.Abstractions
 {
     public interface IPaymentsRepository : IRepositoryBase<Payment, int>
     {
-
     }
 }

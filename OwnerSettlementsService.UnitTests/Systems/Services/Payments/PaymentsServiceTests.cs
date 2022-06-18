@@ -11,8 +11,9 @@ using Force.DeepCloner;
 using OwnerSettlementsService.Core;
 using FluentAssertions;
 using OwnerSettlementsService.UnitTests.Helpers;
+using System.Collections.Generic;
 
-namespace OwnerSettlementsService.UnitTests.Systems.Services;
+namespace OwnerSettlementsService.UnitTests.Systems.Services.Payments;
 
 public partial class PaymentsServiceTests
 {
@@ -31,47 +32,42 @@ public partial class PaymentsServiceTests
         _comparer = new Comparer<Payment, int>();
     }
 
-    [Fact]
-    public async Task CreatePayment_Returns_Successful_Result()
+    
+    private List<Payment> GetAListOfPayments()
     {
-        var today = new DateTime(2022, 5, 21);
-        var inputPayment = new Payment
+        return new List<Payment>
         {
-            Amount = 6600,
-            Comment = "Some random comment",
-            SentAt = DateTime.Now,
-            DeliveredBy = "Sonia"
+            new Payment
+            {
+                Id = 1,
+                Amount = 123,
+                Comment = "Any comment",
+                Confirmed = true,
+                CreatedAt = new DateTime(2021, 4, 12),
+                DeliveredBy = "Hector",
+                SentAt = new DateTime(2021, 1, 02)
+            },
+            new Payment
+            {
+                Id = 2,
+                Amount = 4356,
+                Comment = "Any comment 2",
+                Confirmed = false,
+                CreatedAt = new DateTime(2021, 12, 12),
+                DeliveredBy = "Javier",
+                SentAt = new DateTime(2020, 1, 02)
+            },
+            new Payment
+            {
+                Id = 3,
+                Amount = 123,
+                Comment = "Any comment",
+                Confirmed = true,
+                CreatedAt = new DateTime(2021, 4, 25),
+                DeliveredBy = "Anyone",
+                SentAt = new DateTime(2020, 1, 10)
+            }
         };
-        var expectedPayment = inputPayment.DeepClone();
-        expectedPayment.CreatedAt = today;
-        var expectedResult = new OperationResult<Payment>(expectedPayment);
-
-        _paymentsRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
-        _dateTimeBrokerMock.Setup(x => x.GetCurrentDateTime()).ReturnsAsync(today);
-
-        var actualResult = await _paymentsService.CreatePayment(inputPayment);
-
-        actualResult.Should().BeEquivalentTo(expectedResult);
     }
-
-    [Fact]
-    public async Task CreatePayment_Calls_InsertRepository()
-    {
-        var today = new DateTime(2022, 5, 21);
-        var inputPayment = new Payment
-        {
-            Amount = 6600,
-            Comment = "Some random comment",
-            SentAt = DateTime.Now,
-            DeliveredBy = "Sonia"
-        };
-
-        _paymentsRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
-        _dateTimeBrokerMock.Setup(x => x.GetCurrentDateTime()).ReturnsAsync(today);
-
-        await _paymentsService.CreatePayment(inputPayment);
-
-        _paymentsRepositoryMock.Verify(broker => broker.Insert(It.Is(inputPayment, _comparer)), Times.Once);
-        _paymentsRepositoryMock.Verify(broker => broker.SaveChangesAsync(), Times.Once);
-    }
+    
 }

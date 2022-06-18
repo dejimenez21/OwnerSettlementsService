@@ -28,5 +28,10 @@ namespace OwnerSettlementsService.Core.Services
             await _paymentsRepository.SaveChangesAsync();
             return inputPayment;
         }
+
+        public Task<IEnumerable<Payment>> RetrieveAll()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
