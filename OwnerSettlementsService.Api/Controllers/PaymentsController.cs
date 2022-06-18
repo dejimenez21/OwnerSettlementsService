@@ -2,6 +2,7 @@
 using OwnerSettlementsService.Core.Services.Abstractions;
 using OwnerSettlementsService.Data.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OwnerSettlementsService.Api.Controllers
@@ -22,6 +23,13 @@ namespace OwnerSettlementsService.Api.Controllers
         {
             var result = await _paymentsService.CreatePayment(inputPayment);
             return Created($"/api/payments/{result.Data.Id}", result.Data);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Payment>>> GetAllPayments()
+        {
+            var payments = await _paymentsService.RetrieveAllPayments();
+            return Ok(payments);
         }
     }
 }

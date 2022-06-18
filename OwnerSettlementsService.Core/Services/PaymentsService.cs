@@ -29,9 +29,9 @@ namespace OwnerSettlementsService.Core.Services
             return inputPayment;
         }
 
-        public Task<IEnumerable<Payment>> RetrieveAllPayments()
+        public async Task<IEnumerable<Payment>> RetrieveAllPayments()
         {
-            return _paymentsRepository.SelectAll();
+            return await _paymentsRepository.SelectAll();
         }
     }
 }
