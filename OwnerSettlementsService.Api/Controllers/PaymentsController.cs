@@ -21,7 +21,7 @@ namespace OwnerSettlementsService.Api.Controllers
         public async Task<ActionResult<Payment>> PostPayment(Payment inputPayment)
         {
             var result = await _paymentsService.CreatePayment(inputPayment);
-            return Created($"/api/payments/{result.Data.Id}", result);
+            return Created($"/api/payments/{result.Data.Id}", result.Data);
         }
     }
 }
