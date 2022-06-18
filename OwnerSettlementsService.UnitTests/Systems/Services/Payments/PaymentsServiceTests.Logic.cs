@@ -47,7 +47,7 @@ namespace OwnerSettlementsService.UnitTests.Systems.Services.Payments
             _paymentsRepositoryMock.Setup(x => x.SelectAll()).ReturnsAsync(storagePayments);
 
             // when 
-            var actualPayments = await _paymentsService.RetrieveAll();
+            var actualPayments = await _paymentsService.RetrieveAllPayments();
 
             // then
             actualPayments.Should().BeEquivalentTo(expectedPayments);

@@ -10,6 +10,6 @@ namespace OwnerSettlementsService.Core.Services.Abstractions
     public interface IPaymentsService
     {
         Task<OperationResult<Payment>> CreatePayment(Payment inputPayment);
-        Task<IEnumerable<Payment>> RetrieveAll();
+        Task<IEnumerable<Payment>> RetrieveAllPayments();
     }
 }

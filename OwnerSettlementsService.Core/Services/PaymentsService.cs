@@ -29,9 +29,9 @@ namespace OwnerSettlementsService.Core.Services
             return inputPayment;
         }
 
-        public Task<IEnumerable<Payment>> RetrieveAll()
+        public Task<IEnumerable<Payment>> RetrieveAllPayments()
         {
-            throw new NotImplementedException();
+            return _paymentsRepository.SelectAll();
         }
     }
 }
