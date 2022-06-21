@@ -1,4 +1,5 @@
-﻿using OwnerSettlementsService.Core.Services.Abstractions;
+﻿using OwnerSettlementsService.Core.Exceptions;
+using OwnerSettlementsService.Core.Services.Abstractions;
 using OwnerSettlementsService.Data.DateTimes;
 using OwnerSettlementsService.Data.Models;
 using OwnerSettlementsService.Data.Repositories.Abstractions;
@@ -32,8 +33,9 @@ namespace OwnerSettlementsService.Core.Services
         public async Task<OperationResult<int>> DeletePaymentById(int inputId)
         {
             var payment = await _paymentsRepository.SelectById(inputId);
+            if (payment == null)
+                return new NotFoundException(nameof(Payment), inputId);
             _paymentsRepository.Delete(payment);
-
             return await _paymentsRepository.SaveChangesAsync();
         }
 

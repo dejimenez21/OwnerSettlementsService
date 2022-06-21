@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OwnerSettlementsService.Core.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace OwnerSettlementsService.Core
     {
         public bool Success { get; set; }
         public T Data { get; set; }
-        public Exception Error { get; set; }
+        public BusinessException Error { get; set; }
 
         public OperationResult(T data)
         {
@@ -18,8 +19,9 @@ namespace OwnerSettlementsService.Core
             this.Success = true;
         }
 
-        public OperationResult(Exception exception)
+        public OperationResult(BusinessException exception)
         {
+            this.Success = false;
             this.Error = exception;
         }
 
@@ -28,5 +30,8 @@ namespace OwnerSettlementsService.Core
 
         public static implicit operator T(OperationResult<T> result) =>
             result.Data;
+
+        public static implicit operator OperationResult<T>(BusinessException exception) => 
+            new OperationResult<T>(exception);
     }
 }
