@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OwnerSettlementsService.Data.Repositories
 {
-    public class RepositoryBase<TEntity, TKey> : IRepositoryBase<TEntity, TKey> where TEntity : class
+    public class RepositoryBase<TEntity, TKey> : IRepositoryBase<TEntity, TKey> where TEntity : EntityBase<TKey>
     {
         protected readonly OSSDbContext _dbContext;
         protected DbSet<TEntity> dbSet => _dbContext.Set<TEntity>();
@@ -31,6 +31,11 @@ namespace OwnerSettlementsService.Data.Repositories
         public async Task<IEnumerable<TEntity>> SelectAll()
         {
             return await dbSet.ToListAsync();
+        }
+
+        public async Task<TEntity> SelectById(TKey id)
+        {
+            return await dbSet.FindAsync(id);
         }
     }
 }

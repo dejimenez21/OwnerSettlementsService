@@ -38,7 +38,7 @@ namespace OwnerSettlementsService.UnitTests.Systems.Services.Payments
         }
 
         [Fact]
-        public async Task RetrieveAllPayments_Returns_Successful_Result()
+        public async Task RetrieveAllPayments_Returns_List_Of_Payments()
         {
             // given
             var storagePayments = GetAListOfPayments();
@@ -51,6 +51,30 @@ namespace OwnerSettlementsService.UnitTests.Systems.Services.Payments
 
             // then
             actualPayments.Should().BeEquivalentTo(expectedPayments);
+        }
+
+        [Fact]
+        public async Task RetrievePaymentById_When_Provided_Id_Exist_Returns_Payment()
+        {
+            // given
+            var inputId = 2;
+            var storagePayment = new Payment
+            {
+                Id = inputId,
+                Amount = 2345,
+                Confirmed = true,
+                DeliveredBy = "Someone",
+                SentAt = new DateTime(2025, 12, 6)
+            };
+            var expectedPayment = storagePayment;
+
+            _paymentsRepositoryMock.Setup(x => x.SelectById(inputId)).ReturnsAsync(storagePayment);
+
+            // when
+            var actualPayment = await _paymentsService.RetrievePaymentById(inputId);
+
+            // then
+            actualPayment.Should().BeEquivalentTo(expectedPayment);
         }
     }
 }

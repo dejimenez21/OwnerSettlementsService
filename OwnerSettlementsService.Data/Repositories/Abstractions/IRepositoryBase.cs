@@ -12,6 +12,7 @@ namespace OwnerSettlementsService.Data.Repositories.Abstractions
         void Insert(TEntity entity);
 
         Task<IEnumerable<TEntity>> SelectAll();
+        Task<TEntity> SelectById(TKey id);
 
         Task<int> SaveChangesAsync();
     }

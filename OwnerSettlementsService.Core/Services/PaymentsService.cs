@@ -33,5 +33,10 @@ namespace OwnerSettlementsService.Core.Services
         {
             return await _paymentsRepository.SelectAll();
         }
+
+        public Task<Payment> RetrievePaymentById(int inputId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

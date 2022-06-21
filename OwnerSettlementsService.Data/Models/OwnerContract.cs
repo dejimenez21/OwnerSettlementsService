@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 
 namespace OwnerSettlementsService.Data.Models
 {
-    public class OwnerContract
+    public class OwnerContract : EntityBase<int>
     {
-        public int Id { get; set; }
         public string OwnerName { get; set; }
         [Column(TypeName = "decimal(12,2)")]
         public decimal TotalShare { get; set; }
-        public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
     }
 }

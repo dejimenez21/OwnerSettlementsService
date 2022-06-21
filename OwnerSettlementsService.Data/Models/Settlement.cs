@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace OwnerSettlementsService.Data.Models
 {
-    public class Settlement
+    public class Settlement : EntityBase<int>
     {
-        public int Id { get; set; }
         public int InvoiceId { get; set; }
         public int PaymentId { get; set; }
         [Column(TypeName = "decimal(12,2)")]
