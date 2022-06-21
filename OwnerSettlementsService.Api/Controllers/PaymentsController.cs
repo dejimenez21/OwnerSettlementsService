@@ -33,10 +33,17 @@ namespace OwnerSettlementsService.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Payment>> GetPaymentById([FromRoute]int id)
+        public async Task<ActionResult<Payment>> GetPaymentById([FromRoute] int id)
         {
             var payment = await _paymentsService.RetrievePaymentById(id);
-            return Ok(payment);
+            return payment != null ? Ok(payment) : NotFound();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeletePayment([FromRoute] int id)
+        {
+            var result = await _paymentsService.DeletePaymentById(id);
+            return result.Success ? NoContent() : NotFound();
         }
     }
 }
