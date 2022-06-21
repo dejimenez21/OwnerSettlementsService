@@ -34,9 +34,9 @@ namespace OwnerSettlementsService.Core.Services
             return await _paymentsRepository.SelectAll();
         }
 
-        public Task<Payment> RetrievePaymentById(int inputId)
+        public async Task<Payment> RetrievePaymentById(int inputId)
         {
-            throw new NotImplementedException();
+            return await _paymentsRepository.SelectById(inputId);
         }
     }
 }
