@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OwnerSettlementsService.Data;
 
 namespace OwnerSettlementsService.Data.Migrations
 {
     [DbContext(typeof(OSSDbContext))]
-    partial class OSSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220621142841_Some database changes")]
+    partial class Somedatabasechanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,6 +32,9 @@ namespace OwnerSettlementsService.Data.Migrations
                         .HasColumnType("decimal(12,2)");
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("GeneratedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Month")

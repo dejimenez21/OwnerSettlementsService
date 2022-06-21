@@ -10,6 +10,5 @@ namespace OwnerSettlementsService.Data.Models
         public decimal Amount { get; set; }
         [Range(1, 12)]
         public int Month { get; set; }
-        public DateTime GeneratedAt { get; set; }
     }
 }
