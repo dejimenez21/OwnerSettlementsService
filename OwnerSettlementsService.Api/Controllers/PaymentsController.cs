@@ -22,7 +22,7 @@ namespace OwnerSettlementsService.Api.Controllers
         public async Task<ActionResult<Payment>> PostPayment(Payment inputPayment)
         {
             var result = await _paymentsService.CreatePayment(inputPayment);
-            return Created($"/api/payments/{result.Data.Id}", result.Data);
+            return CreatedAtAction(nameof(GetPaymentById), new { id = result.Data.Id }, result.Data);
         }
 
         [HttpGet]
@@ -30,6 +30,13 @@ namespace OwnerSettlementsService.Api.Controllers
         {
             var payments = await _paymentsService.RetrieveAllPayments();
             return Ok(payments);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Payment>> GetPaymentById([FromRoute]int id)
+        {
+            var payment = await _paymentsService.RetrievePaymentById(id);
+            return Ok(payment);
         }
     }
 }
