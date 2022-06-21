@@ -37,5 +37,10 @@ namespace OwnerSettlementsService.Data.Repositories
         {
             return await dbSet.FindAsync(id);
         }
+
+        public void Delete(TEntity entity)
+        {
+            dbSet.Remove(entity);
+        }
     }
 }

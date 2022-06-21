@@ -76,5 +76,21 @@ namespace OwnerSettlementsService.UnitTests.Systems.Services.Payments
             // then
             actualPayment.Should().BeEquivalentTo(expectedPayment);
         }
+
+        [Fact]
+        public async Task DeletePayment_Returns_Successful_Result()
+        {
+            // given
+            var inputId = 6;
+            var expectedResult = new OperationResult<int>(1);
+
+            _paymentsRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
+
+            // when
+            var actualResult = await _paymentsService.DeletePaymentById(inputId);
+
+            //then
+            actualResult.Should().BeEquivalentTo(expectedResult);
+        }
     }
 }

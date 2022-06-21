@@ -10,6 +10,7 @@ namespace OwnerSettlementsService.Data.Repositories.Abstractions
     public interface IRepositoryBase<TEntity, TKey>
     {
         void Insert(TEntity entity);
+        void Delete(TEntity entity);
 
         Task<IEnumerable<TEntity>> SelectAll();
         Task<TEntity> SelectById(TKey id);

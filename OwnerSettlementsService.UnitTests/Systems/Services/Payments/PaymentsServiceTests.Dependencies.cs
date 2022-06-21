@@ -28,6 +28,8 @@ namespace OwnerSettlementsService.UnitTests.Systems.Services.Payments
             _paymentsRepositoryMock.Verify(broker => broker.Insert(It.Is(inputPayment, _comparer)), Times.Once);
             _paymentsRepositoryMock.Verify(broker => broker.SaveChangesAsync(), Times.Once);
             _dateTimeBrokerMock.Verify(broker => broker.GetCurrentDateTime(), Times.Once);
+
+            _paymentsRepositoryMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -36,6 +38,44 @@ namespace OwnerSettlementsService.UnitTests.Systems.Services.Payments
             await _paymentsService.RetrieveAllPayments();
 
             _paymentsRepositoryMock.Verify(broker => broker.SelectAll(), Times.Once);
+            _paymentsRepositoryMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task RetrievePaymentById_Calls_Repository()
+        {
+            var inputId = 3;
+            await _paymentsService.RetrievePaymentById(inputId);
+
+            _paymentsRepositoryMock.Verify(broker => broker.SelectById(inputId), Times.Once);
+            _paymentsRepositoryMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task DeletePayment_Calls_Repository()
+        {
+            // given
+            var inputId = 6;
+            var storagePayment = new Payment
+            {
+                Id = inputId,
+                Amount = 2345,
+                Confirmed = true,
+                DeliveredBy = "Someone",
+                SentAt = new DateTime(2025, 12, 6)
+            };
+
+            _paymentsRepositoryMock.Setup(x => x.SelectById(inputId)).ReturnsAsync(storagePayment);
+
+            // when
+            await _paymentsService.DeletePaymentById(inputId);
+
+            //then
+            _paymentsRepositoryMock.Verify(broker => broker.SelectById(inputId), Times.Once);
+            _paymentsRepositoryMock.Verify(broker => broker.Delete(It.Is(storagePayment, _comparer)), Times.Once);
+            _paymentsRepositoryMock.Verify(broker => broker.SaveChangesAsync(), Times.Once);
+            _paymentsRepositoryMock.VerifyNoOtherCalls();
+
         }
     }
 }

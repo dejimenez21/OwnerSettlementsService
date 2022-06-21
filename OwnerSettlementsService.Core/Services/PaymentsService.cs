@@ -29,6 +29,11 @@ namespace OwnerSettlementsService.Core.Services
             return inputPayment;
         }
 
+        public Task<OperationResult<int>> DeletePaymentById(int inputId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Payment>> RetrieveAllPayments()
         {
             return await _paymentsRepository.SelectAll();

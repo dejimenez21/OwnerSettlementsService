@@ -12,5 +12,6 @@ namespace OwnerSettlementsService.Core.Services.Abstractions
         Task<OperationResult<Payment>> CreatePayment(Payment inputPayment);
         Task<IEnumerable<Payment>> RetrieveAllPayments();
         Task<Payment> RetrievePaymentById(int inputId);
+        Task<OperationResult<int>> DeletePaymentById(int inputId);
     }
 }
