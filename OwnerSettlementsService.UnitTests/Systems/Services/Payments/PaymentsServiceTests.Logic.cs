@@ -78,6 +78,21 @@ namespace OwnerSettlementsService.UnitTests.Systems.Services.Payments
         }
 
         [Fact]
+        public async Task RetrievePaymentById_When_Payment_Doesnt_Exists_Returns_Null()
+        {
+            // given
+            var inputId = 20;
+
+            _paymentsRepositoryMock.Setup(x => x.SelectById(inputId)).ReturnsAsync(value: null);
+
+            // when
+            var actualPayment = await _paymentsService.RetrievePaymentById(inputId);
+
+            // then
+            actualPayment.Should().BeNull();
+        }
+
+        [Fact]
         public async Task DeletePayment_Returns_Successful_Result()
         {
             // given
