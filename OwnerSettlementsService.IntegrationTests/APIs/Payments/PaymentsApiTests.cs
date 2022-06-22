@@ -40,15 +40,16 @@ namespace OwnerSettlementsService.IntegrationTests.APIs.Payments
             var response = await _apiBroker.PostPaymentAsync(inputPayment);
 
             //then
-            var returnedPayment = await response.ToEntity<Payment>();
-            var storedPayment = await (await _apiBroker.GetPaymentById(returnedPayment.Id)).ToEntity<Payment>();
+            var returnedPayment = await response.ToEntityAsync<Payment>();
+            var storedPayment = await (await _apiBroker.GetPaymentById(returnedPayment.Id)).ToEntityAsync<Payment>();
             await _apiBroker.DeletePayment(storedPayment.Id);
 
             response.StatusCode.Should().Be(expectedStatusCode);
             storedPayment.Should().BeEquivalentTo(expectedPayment, options => options
                 .Excluding(p => p.Id)
                 .Excluding(p => p.CreatedAt));
-
+            storedPayment.Id.Should().NotBe(0);
+            storedPayment.CreatedAt.Should().BeSameDateAs(DateTime.Now);
         }
 
         [Fact]
@@ -69,6 +70,33 @@ namespace OwnerSettlementsService.IntegrationTests.APIs.Payments
 
             //then
             response.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        [Fact]
+        public async Task GetPaymentById_Returns_Ok_And_Requested_Payment()
+        {
+            //given
+            var inputPayment = new Payment
+            {
+                Amount = 8000,
+                Comment = "Some random comment!!!",
+                SentAt = DateTime.Now,
+                DeliveredBy = "Jason"
+            };
+            var expectedStatusCode = HttpStatusCode.OK;
+            var expectedPayment = await (await _apiBroker.PostPaymentAsync(inputPayment)).ToEntityAsync<Payment>();
+            var inputId = expectedPayment.Id;
+
+            //when
+            var response = await _apiBroker.GetPaymentById(inputId);
+
+            //then
+            await _apiBroker.DeletePayment(inputId);
+
+            var actualPayment = await response.ToEntityAsync<Payment>();
+
+            response.StatusCode.Should().Be(expectedStatusCode);
+            actualPayment.Should().BeEquivalentTo(expectedPayment);
         }
 
     }

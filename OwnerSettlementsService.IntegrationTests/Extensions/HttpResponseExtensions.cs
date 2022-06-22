@@ -5,7 +5,7 @@ namespace OwnerSettlementsService.IntegrationTests.Extensions
 {
     public static class HttpResponseExtensions
     {
-        public static async Task<T> ToEntity<T>(this HttpResponseMessage response) =>
+        public static async Task<T> ToEntityAsync<T>(this HttpResponseMessage response) =>
             await response.Content.ReadAsAsync<T>();
     }
 }
