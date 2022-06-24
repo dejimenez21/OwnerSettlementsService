@@ -28,4 +28,10 @@
     <ProjectReference Include="..\OwnerSettlementsService.Api\OwnerSettlementsService.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings-tests.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
