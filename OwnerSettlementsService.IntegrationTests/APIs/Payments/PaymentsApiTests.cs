@@ -132,5 +132,57 @@ namespace OwnerSettlementsService.IntegrationTests.APIs.Payments
             response.StatusCode.Should().Be(expectedStatusCode);
             actualPayload.Should().BeEmpty();
         }
+
+        [Fact]
+        public async Task GetAllPayments_Returns_A_List_Of_Payments()
+        {
+            //given
+            var expectedStatusCode = HttpStatusCode.OK;
+            var inputPayments = new List<Payment>
+            {
+                new Payment
+                {
+                    Amount = 8000,
+                    Comment = "Some random comment 1!!!",
+                    SentAt = new DateTime(2021, 4, 21),
+                    DeliveredBy = "Jason"
+                },
+                new Payment
+                {
+                    Amount = 435,
+                    Comment = "Some random comment 2!!!",
+                    SentAt = new DateTime(2021, 7, 21),
+                    DeliveredBy = "Daniel"
+                },
+                new Payment
+                {
+                    Amount = 5460,
+                    Comment = "Some random comment 3!!!",
+                    SentAt = new DateTime(2021, 4, 15),
+                    DeliveredBy = "Clara"
+                }
+            };
+            var expectedPayments = new List<Payment>();
+            foreach (var inputPayment in inputPayments)
+            {
+                var creationResponse = await _apiBroker.PostPaymentAsync(inputPayment);
+                expectedPayments.Add(await creationResponse.ToEntityAsync<Payment>());
+            }
+
+            //when
+            var actualResponse = await _apiBroker.GetAllPayments();
+
+            //then
+            var actualPayments = await actualResponse.ToEntityAsync<IEnumerable<Payment>>();
+
+            actualResponse.StatusCode.Should().Be(expectedStatusCode);
+            actualPayments.Should().BeEquivalentTo(expectedPayments);
+
+            //finally
+            foreach (var paymentId in actualPayments.Select(p => p.Id))
+            {
+                await _apiBroker.DeletePayment(paymentId);
+            }
+        }
     }
 }
