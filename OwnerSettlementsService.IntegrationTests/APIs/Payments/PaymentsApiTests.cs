@@ -6,6 +6,7 @@ using OwnerSettlementsService.IntegrationTests.Extensions;
 using OwnerSettlementsService.IntegrationTests.Helpers;
 using OwnerSettlementsService.IntegrationTests.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -115,6 +116,21 @@ namespace OwnerSettlementsService.IntegrationTests.APIs.Payments
             //then
             response.StatusCode.Should().Be(expectedStatusCode);
             await response.Invoking(async r => await r.ToEntityAsync<Payment>()).Should().ThrowAsync<Exception>();
+        }
+
+        [Fact]
+        public async Task GetAllPayments_Whithout_Any_Stored_Payment_Returns_Empty_List()
+        {
+            //given
+            var expectedStatusCode = HttpStatusCode.OK;
+            //when
+            var response = await _apiBroker.GetAllPayments();
+
+            //then
+            var actualPayload = await response.ToEntityAsync<IEnumerable<Payment>>();
+
+            response.StatusCode.Should().Be(expectedStatusCode);
+            actualPayload.Should().BeEmpty();
         }
     }
 }
