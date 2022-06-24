@@ -106,7 +106,6 @@ namespace OwnerSettlementsService.IntegrationTests.APIs.Payments
             //given
             var inputId = 100;
             var expectedStatusCode = HttpStatusCode.NotFound;
-            var expectedPayload = new ProblemDetails { Title = "Payment Not Found", Status = 404, Detail = $"The {nameof(Payment)} with the id '{inputId}' doesn't exist." };
 
             await _apiBroker.DeletePayment(inputId);
 
@@ -114,10 +113,8 @@ namespace OwnerSettlementsService.IntegrationTests.APIs.Payments
             var response = await _apiBroker.GetPaymentById(inputId);
 
             //then
-            var actualPayload = await response.ToProblemDetailsAsync();
-
             response.StatusCode.Should().Be(expectedStatusCode);
-            actualPayload.Should().BeEquivalentTo(expectedPayload, options => options.Using(new ProblemDetailsComparer()));
+            await response.Invoking(async r => await r.ToEntityAsync<Payment>()).Should().ThrowAsync<Exception>();
         }
     }
 }
