@@ -3,6 +3,7 @@ using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
 using OwnerSettlementsService.IntegrationTests.Brokers;
 using OwnerSettlementsService.IntegrationTests.Extensions;
+using OwnerSettlementsService.IntegrationTests.Helpers;
 using OwnerSettlementsService.IntegrationTests.Models;
 using System;
 using System.Linq;
@@ -99,5 +100,24 @@ namespace OwnerSettlementsService.IntegrationTests.APIs.Payments
             actualPayment.Should().BeEquivalentTo(expectedPayment);
         }
 
+        [Fact]
+        public async Task GetPaymentById_When_Payment_Doesnt_Exist_Returns_NotFound()
+        {
+            //given
+            var inputId = 100;
+            var expectedStatusCode = HttpStatusCode.NotFound;
+            var expectedPayload = new ProblemDetails { Title = "Payment Not Found", Status = 404, Detail = $"The {nameof(Payment)} with the id '{inputId}' doesn't exist." };
+
+            await _apiBroker.DeletePayment(inputId);
+
+            //when
+            var response = await _apiBroker.GetPaymentById(inputId);
+
+            //then
+            var actualPayload = await response.ToProblemDetailsAsync();
+
+            response.StatusCode.Should().Be(expectedStatusCode);
+            actualPayload.Should().BeEquivalentTo(expectedPayload, options => options.Using(new ProblemDetailsComparer()));
+        }
     }
 }
