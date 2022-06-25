@@ -198,7 +198,7 @@ namespace OwnerSettlementsService.IntegrationTests.APIs.Payments
             };
             var storedPayment = await (await _apiBroker.PostPaymentAsync(inputPayment)).ToEntityAsync<Payment>();
             var inputId = storedPayment.Id;
-            var getBeforeResponse = await _apiBroker.GetPaymentById(inputId);         
+            var getBeforeResponse = await _apiBroker.GetPaymentById(inputId);
             var expectedStatusCode = HttpStatusCode.NoContent;
 
             //when
@@ -210,6 +210,24 @@ namespace OwnerSettlementsService.IntegrationTests.APIs.Payments
             actualResponse.StatusCode.Should().Be(expectedStatusCode);
             getBeforeResponse.StatusCode.Should().Be(HttpStatusCode.OK);
             getAfterResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task DeletePayment_When_Payment_Doesnt_Exist_Returns_NotFound()
+        {
+            //given
+            var inputId = 120;
+            await _apiBroker.DeletePayment(inputId);
+            var expectedStatusCode = HttpStatusCode.NotFound;
+            var expectedPayload = new ProblemDetails { Status = 404, Title = "Payment Not Found", Detail = $"The {nameof(Payment)} with the id '{inputId}' doesn't exist." };
+
+            //when
+            var actualResponse = await _apiBroker.DeletePayment(inputId);
+
+            //then
+            var actualPayload = await actualResponse.ToProblemDetailsAsync();
+            actualResponse.StatusCode.Should().Be(expectedStatusCode);
+            actualPayload.Should().BeEquivalentTo(expectedPayload, options => options.Using(new ProblemDetailsComparer()));
         }
     }
 }
