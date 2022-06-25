@@ -11,7 +11,8 @@ namespace OwnerSettlementsService.Core.Exceptions
     {
         public NotFoundException(string entityName, object keyValue) : base($"The {entityName} with the id '{keyValue}' doesn't exist.")
         {
-            StatusCode = 404;
+            this.StatusCode = 404;
+            this.Title = entityName + " Not Found.";
         }
     }
 }

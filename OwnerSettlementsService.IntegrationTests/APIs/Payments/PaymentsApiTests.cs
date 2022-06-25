@@ -184,5 +184,32 @@ namespace OwnerSettlementsService.IntegrationTests.APIs.Payments
                 await _apiBroker.DeletePayment(paymentId);
             }
         }
+
+        [Fact]
+        public async Task DeletePayment_Removes_Payment_From_Database_And_Returns_NoContent()
+        {
+            //given
+            var inputPayment = new Payment
+            {
+                Amount = 7500,
+                Comment = "Some random comment!!!",
+                SentAt = new DateTime(2020, 5, 12),
+                DeliveredBy = "Jason"
+            };
+            var storedPayment = await (await _apiBroker.PostPaymentAsync(inputPayment)).ToEntityAsync<Payment>();
+            var inputId = storedPayment.Id;
+            var getBeforeResponse = await _apiBroker.GetPaymentById(inputId);         
+            var expectedStatusCode = HttpStatusCode.NoContent;
+
+            //when
+            var actualResponse = await _apiBroker.DeletePayment(inputId);
+
+            //then
+            var getAfterResponse = await _apiBroker.GetPaymentById(inputId);
+
+            actualResponse.StatusCode.Should().Be(expectedStatusCode);
+            getBeforeResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            getAfterResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
     }
 }

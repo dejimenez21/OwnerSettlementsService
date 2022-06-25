@@ -43,7 +43,10 @@ namespace OwnerSettlementsService.Api.Controllers
         public async Task<ActionResult> DeletePayment([FromRoute] int id)
         {
             var result = await _paymentsService.DeletePaymentById(id);
-            return result.Success ? NoContent() : NotFound();
+            //return result.Success ? NoContent() : StatusCode(result.Error.StatusCode);
+            //return this.ToNoContent(result);
+            //return result.ToNoContent();
+            return NoContent();
         }
     }
 }
