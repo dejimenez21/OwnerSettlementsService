@@ -2,6 +2,7 @@
 using Force.DeepCloner;
 using Moq;
 using OwnerSettlementsService.Core;
+using OwnerSettlementsService.Core.Exceptions;
 using OwnerSettlementsService.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -99,6 +100,7 @@ namespace OwnerSettlementsService.UnitTests.Systems.Services.Payments
             var inputId = 6;
             var expectedResult = new OperationResult<int>(1);
 
+            _paymentsRepositoryMock.Setup(x => x.SelectById(inputId)).ReturnsAsync(new Payment { Id = inputId });
             _paymentsRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
 
             // when
@@ -106,6 +108,25 @@ namespace OwnerSettlementsService.UnitTests.Systems.Services.Payments
 
             //then
             actualResult.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        public async Task DeletePayment_When_Id_Doesnt_Exist_Returns_Unsuccessful_Result()
+        {
+            // given
+            var inputId = 15;
+            var expectedResult = new OperationResult<int>(new NotFoundException(nameof(Payment), inputId));
+
+            _paymentsRepositoryMock.Setup(x => x.SelectById(inputId)).ReturnsAsync(value: null);
+
+            // when
+            var actualResult = await _paymentsService.DeletePaymentById(inputId);
+
+            //then
+            actualResult.Should().BeEquivalentTo(expectedResult);
+
+            _paymentsRepositoryMock.Verify(broker => broker.SelectById(inputId), Times.Once);
+            _paymentsRepositoryMock.VerifyNoOtherCalls();
         }
     }
 }
